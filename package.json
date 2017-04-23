@@ -11,12 +11,22 @@
     "semantic-ui-react": "^0.68.0"
   },
   "devDependencies": {
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.0",
+    "prettier": "^1.2.2",
     "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettify": "prettier --tab-width 4 --single-quote --write \"./src/**/*.js\""
+  },
+  "lint-stage": {
+    "*.js": [
+      "prettier --tab-width 4 --single-quote --write",
+      "git add"
+    ]
   }
 }
