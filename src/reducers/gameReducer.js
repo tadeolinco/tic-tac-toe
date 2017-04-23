@@ -6,7 +6,7 @@ const gameReducer = (
     action
 ) => {
     switch (action.type) {
-        case 'PLAY_TURN':
+        case 'MAKE_MOVE':
             return {
                 ...state,
                 board: [
