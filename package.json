@@ -22,7 +22,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
-        "prettify": "prettier --tab-width 4 --single-quote --write \"./src/**/*.js\"",
+        "prettify": "prettier --tab-width 4 --single-quote --jsx-bracket-same-line --write \"./src/**/*.js\"",
         "pre-commit": "lint-staged",
         "pre-push": "lint-staged",
         "lint-staged": "lint-staged"
@@ -31,7 +31,7 @@
     "pre-push": "lint-staged",
     "lint-stage": {
         "*.js": [
-            "prettier --tab-width 4 --single-quote --write",
+            "prettier --tab-width 4 --single-quote --jsx-bracket-same-line --write",
             "git add"
         ]
     }
