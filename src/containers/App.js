@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
-import Table from './Table';
-
-import './App.css';
+import GameTable from './GameTable';
+import { Grid } from 'semantic-ui-react';
+import GameHeader from '../components/GameHeader';
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-            <Table />
-
-            </div>
+            <Grid container centered>
+                <Grid.Row>
+                    <Grid.Column width={8}>
+                        <GameHeader />
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column width={8}>
+                        <GameTable />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     }
 }
