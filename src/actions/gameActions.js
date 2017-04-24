@@ -48,6 +48,8 @@ function minNode (board, index, turnCount){
   if(turnCount% 2 === 0) boardCopy[index] = 'X';
   else boardCopy[index]= 'O';
   console.log(boardCopy);
+
+
   status = checkStatus(boardCopy);
   if(status === false){
     for(let i = 0; i < 9; ++i){                                     //min algo
@@ -57,7 +59,7 @@ function minNode (board, index, turnCount){
       }
     }
   }else{
-    console.log(status);
+    console.log(status);                                            //lacks when draw
     if(status === "X") return -1;
     else if (status ==="O") return 1;
     else return 0;
@@ -86,7 +88,7 @@ function maxNode (board, index, turnCount){
     }
   }else{
     console.log(status);
-    if(status === "X") return -1;
+    if(status === "X") return -1;                                   //lacks when draw
     else if (status ==="O") return 1;
     else return 0;
   }
@@ -103,20 +105,23 @@ function aiMove(game, status){
   var boardCopy;
   boardCopy = makeBoardCopy(game.board);
   turnCount = game.turnCount;
-  for(let i = 0; i < 9; i++){
+
+
+  for(let i = 0; i < 9; i++){                                 //main tree.
     if(boardCopy[i] === ""){
-      values[i] = maxNode(boardCopy, i, turnCount);
+      values[i] = maxNode(boardCopy, i, turnCount);           //stores value of each sub tree to values
     }
   }
+
   console.log(game.board);
-  for(let i =0; i < 9; ++i){
-    console.log(values[index] , "aksdjnaksd", values[i]);
+  for(let i =0; i < 9; ++i){                                //chooses the best move
     if(values[index] < values[i]){
       if(boardCopy[i] === ""){
         index =i;
       }
     }
   }
+
   console.log(index);
   return {
       type: 'MAKE_MOVE',
