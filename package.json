@@ -31,7 +31,7 @@
     "pre-commit": "lint-staged",
     "pre-push": "lint-staged",
     "lint-stage": {
-        "*.js$": [
+        "*.js": [
             "prettier --tab-width 4 --single-quote --jsx-bracket-same-line --write",
             "git add"
         ]
