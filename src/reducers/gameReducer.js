@@ -16,6 +16,12 @@ const gameReducer = (
                 ],
                 turnCount: state.turnCount + 1
             };
+        case 'compute':
+        console.log(state.board);
+          return {
+            ...state,
+            turnCount: state.turnCount+ 1
+          };
         default:
             return state;
     }

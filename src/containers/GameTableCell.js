@@ -22,11 +22,11 @@ class GameTableCell extends Component {
 }
 
 const mapStateToProps = state => ({
-    game: state.game
+    game: state.game,
 });
 
 const mapDispatchToProps = dispatch => ({
-    playTurn: index => {
+    playTurn: (index) => {
         dispatch(playTurn(index));
     }
 });
