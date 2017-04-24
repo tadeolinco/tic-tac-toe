@@ -8,14 +8,14 @@ function makeMove(index) {
 }
 
 function checkStatus(board){
-  if(board[0]===board[1] && board[2]===board[1]) return board[0];
-  else if(board[0]===board[4] && board[0]===board[7]) return board[0];
-  else if(board[0]===board[3] && board[0]===board[6]) return board[0];
-  else if(board[1]===board[4] && board[1]===board[7]) return board[1];
-  else if(board[2]===board[5] && board[2]===board[8]) return board[2];
-  else if(board[3]===board[4] && board[3]===board[5]) return board[3];
-  else if(board[6]===board[7] && board[7]===board[8]) return board[6];
-  else if(board[2]===board[4] && board[2]===board[5]) return board[2];
+  if(board[0]===board[1] && board[2]===board[1] && board[0] !== "") return board[0];
+  else if(board[0]===board[4] && board[0]===board[7] && board[0] !== "") return board[0];
+  else if(board[0]===board[3] && board[0]===board[6] && board[0] !== "") return board[0];
+  else if(board[1]===board[4] && board[1]===board[7] && board[0] !== "") return board[1];
+  else if(board[2]===board[5] && board[2]===board[8] && board[0] !== "") return board[2];
+  else if(board[3]===board[4] && board[3]===board[5] && board[0] !== "") return board[3];
+  else if(board[6]===board[7] && board[7]===board[8] && board[0] !== "") return board[6];
+  else if(board[2]===board[4] && board[2]===board[5] && board[0] !== "") return board[2];
   else return false;
 }
 
@@ -42,17 +42,27 @@ function makeBoardCopy(board){
 function minNode (board, index, turnCount){
   var m, v;
   var boardCopy;
+  var status;
   boardCopy = makeBoardCopy(board);         // always make copy of board so previous state wont be change
   m = 2;            // positive infinity
   if(turnCount% 2 === 0) boardCopy[index] = 'X';
   else boardCopy[index]= 'O';
   console.log(boardCopy);
-  for(let i = 0; i < 9; ++i){                                     //min algo
-    if(boardCopy[i] === ""){
-      v = minNode(boardCopy, i, turnCount+1);
-      m = min(m, v);
+  status = checkStatus(boardCopy);
+  if(status === false){
+    for(let i = 0; i < 9; ++i){                                     //min algo
+      if(boardCopy[i] === ""){
+        v = minNode(boardCopy, i, turnCount+1);
+        m = min(m, v);
+      }
     }
+  }else{
+    console.log(status);
+    if(status === "X") return -1;
+    else if (status ==="O") return 1;
+    else return 0;
   }
+
   return m;
 
 }
@@ -60,16 +70,25 @@ function minNode (board, index, turnCount){
 function maxNode (board, index, turnCount){
   var m, v;
   var boardCopy;
+  var status;
   boardCopy = makeBoardCopy(board);         // always make copy of board so previous state wont be change
   m = -2;       // negative infinity
   if(turnCount% 2 === 0) boardCopy[index] = 'X';
   else boardCopy[index]= 'O';
   console.log(boardCopy);
-  for(let i = 0; i < 9; ++i){                                     //max algo
-    if(boardCopy[i] === ""){
-      v = minNode(boardCopy, i, turnCount+1);
-      m = max(m, v);
+  status = checkStatus(boardCopy);
+  if(status === false){
+    for(let i = 0; i < 9; ++i){                                     //max algo
+      if(boardCopy[i] === ""){
+        v = minNode(boardCopy, i, turnCount+1);
+        m = max(m, v);
+      }
     }
+  }else{
+    console.log(status);
+    if(status === "X") return -1;
+    else if (status ==="O") return 1;
+    else return 0;
   }
   return m;
 }
@@ -78,7 +97,7 @@ function maxNode (board, index, turnCount){
 
 
 function aiMove(game, status){
-  var index;
+  var index= 0;
   var turnCount;
   var values = [];
   var boardCopy;
@@ -90,6 +109,15 @@ function aiMove(game, status){
     }
   }
   console.log(game.board);
+  for(let i =0; i < 9; ++i){
+    console.log(values[index] , "aksdjnaksd", values[i]);
+    if(values[index] < values[i]){
+      if(boardCopy[i] === ""){
+        index =i;
+      }
+    }
+  }
+  console.log(index);
   return {
       type: 'MAKE_MOVE',
       payload: {
