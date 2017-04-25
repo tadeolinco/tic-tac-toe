@@ -40,12 +40,12 @@ function successors(board, turnCount) {
         if (cell === '') {
             let boardCopy = board.slice();
             boardCopy[index] = move;
+            boards.push(boardCopy);
         }
     });
 
     return boards;
 }
-
 
 function maxValue(board, turnCount) {
     let m = Number.NEGATIVE_INFINITY;
