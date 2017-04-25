@@ -24,32 +24,43 @@ function checkStatus(board) {
         return board[6];
     else if (board[2] === board[4] && board[2] === board[5] && board[0] !== '')
         return board[2];
+    else if (
+        board[0] !== '' &&
+        board[1] !== '' &&
+        board[2] !== '' &&
+        board[3] !== '' &&
+        board[4] !== '' &&
+        board[6] !== '' &&
+        board[7] !== '' &&
+        board[8] !== ''
+    )
+        return 'draw';
     else return false;
 }
 
-function makeBoardCopy(board) {
-    return board.map(cell => cell);
-}
-
 function minNode(board, index, turnCount) {
-    var m, v;
-    var boardCopy;
-    var status;
-    boardCopy = makeBoardCopy(board); // always make copy of board so previous state wont be change
-    m = Number.POSITIVE_INFINITY; // positive infinity
-    if (turnCount % 2 === 0) boardCopy[index] = 'X';
-    else boardCopy[index] = 'O';
-    console.log(boardCopy);
+    let m = Number.POSITIVE_INFINITY; // positive infinity
+    // always make copy of board so previous state wont be change
+    let boardCopy = board.slice();
 
-    status = checkStatus(boardCopy);
+    if (turnCount % 2 === 0) {
+        boardCopy[index] = 'X';
+    } else {
+        boardCopy[index] = 'O';
+    }
+
+    console.log(boardCopy);
+    let status = checkStatus(boardCopy);
     if (status === false) {
         for (let i = 0; i < 9; ++i) {
             //min algo
             if (boardCopy[i] === '') {
-                v = minNode(boardCopy, i, turnCount + 1);
+                let v = maxNode(boardCopy, i, turnCount + 1);
                 m = Math.min(m, v);
             }
         }
+    } else if (status === 'draw') {
+        return 0;
     } else {
         console.log(status); //lacks when draw
         if (status === 'X') return -1;
@@ -61,15 +72,21 @@ function minNode(board, index, turnCount) {
 }
 
 function maxNode(board, index, turnCount) {
-    var m, v;
-    var boardCopy;
-    var status;
-    boardCopy = makeBoardCopy(board); // always make copy of board so previous state wont be change
-    m = -2; // negative infinity
-    if (turnCount % 2 === 0) boardCopy[index] = 'X';
-    else boardCopy[index] = 'O';
+    let m = Number.NEGATIVE_INFINITY;
+    let v = 0;
+    // always make copy of board so previous state wont be change
+    let boardCopy = board.slice();
+
+    m = Number.NEGATIVE_INFINITY; // negative infinity
+
+    if (turnCount % 2 === 0) {
+        boardCopy[index] = 'X';
+    } else {
+        boardCopy[index] = 'O';
+    }
+
     console.log(boardCopy);
-    status = checkStatus(boardCopy);
+    let status = checkStatus(boardCopy);
     if (status === false) {
         for (let i = 0; i < 9; ++i) {
             //max algo
@@ -90,17 +107,16 @@ function maxNode(board, index, turnCount) {
 }
 
 function aiMove(game, status) {
-    var index = 0;
-    var turnCount;
-    var values = [];
-    var boardCopy;
-    boardCopy = makeBoardCopy(game.board);
-    turnCount = game.turnCount;
+    let index = 0;
+    let values = [];
+    let turnCount = game.turnCount;
+    let boardCopy = game.board.slice();
 
     for (let i = 0; i < 9; i++) {
         //main tree.
         if (boardCopy[i] === '') {
-            values[i] = maxNode(boardCopy, i, turnCount); //stores value of each sub tree to values
+            //stores value of each sub tree to values
+            values[i] = minNode(boardCopy, i, turnCount);
         }
     }
 
@@ -115,12 +131,7 @@ function aiMove(game, status) {
     }
 
     console.log(index);
-    return {
-        type: 'MAKE_MOVE',
-        payload: {
-            index
-        }
-    };
+    return makeMove(index);
 }
 
 export function playTurn(index, game) {
@@ -132,56 +143,3 @@ export function playTurn(index, game) {
         // compute here
     };
 }
-
-/*
-function makeBoardCopy(original, copy){
-for(let i = 0; i < 9; ++i){
-copy[i] = original[i];
-}
-return copy;
-}
-
-function makeMinNode(board, index){
-var boardCopy = [];
-boardCopy = makeBoardCopy(board, boardCopy);
-var m = 2;          //positive infinity dapat
-var v = 0;
-boardCopy[index] = "X";
-for(let i = 0; i < 9; ++i){                   //looks for all empty space and try to move there
-v = makeMaxNode(boardCopy, i);
-m = min(v, m);
-}
-
-return v;
-}
-
-function makeMaxNode(board, index){
-var boardCopy = [];
-boardCopy = makeBoardCopy(board, boardCopy);
-var m = -2;                      //dapat neg infinity
-var v= 0;
-boardCopy[index] = "O";
-for( let i =0; i < 9; ++i){
-if(boardCopy[i] === ""){
-v = makeMinNode(boardCopy, i);
-m = max(v, m);
-}
-}
-
-return{
-};
-}
-
-function copmute(game){
-var boardCopy = [];
-boardCopy = makeBoardCopy(game.board, boardCopy);
-for (let i = 0; i < 9; ++i) {
-if(boardCopy[i] === ""){
-makeMaxNode(boardCopy, i);
-}
-}
-return{
-type: "compute"
-}
-}
-*/
