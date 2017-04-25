@@ -27,24 +27,8 @@ function checkStatus(board) {
     else return false;
 }
 
-function max(x, y) {
-    if (x > y) return x;
-    else return y;
-}
-
-function min(x, y) {
-    if (x > y) return y;
-    else return x;
-}
-
 function makeBoardCopy(board) {
-    var copy = [];
-    for (let i = 0; i < 9; i++) {
-        if (board[i] === 'X') copy[i] = 'X';
-        else if (board[i] === 'O') copy[i] = 'O';
-        else copy[i] = '';
-    }
-    return copy;
+    return board.map(cell => cell);
 }
 
 function minNode(board, index, turnCount) {
@@ -52,7 +36,7 @@ function minNode(board, index, turnCount) {
     var boardCopy;
     var status;
     boardCopy = makeBoardCopy(board); // always make copy of board so previous state wont be change
-    m = 2; // positive infinity
+    m = Number.POSITIVE_INFINITY; // positive infinity
     if (turnCount % 2 === 0) boardCopy[index] = 'X';
     else boardCopy[index] = 'O';
     console.log(boardCopy);
@@ -63,7 +47,7 @@ function minNode(board, index, turnCount) {
             //min algo
             if (boardCopy[i] === '') {
                 v = minNode(boardCopy, i, turnCount + 1);
-                m = min(m, v);
+                m = Math.min(m, v);
             }
         }
     } else {
@@ -91,7 +75,7 @@ function maxNode(board, index, turnCount) {
             //max algo
             if (boardCopy[i] === '') {
                 v = minNode(boardCopy, i, turnCount + 1);
-                m = max(m, v);
+                m = Math.max(m, v);
             }
         }
     } else {
