@@ -5,7 +5,10 @@ import { Table, Button } from 'semantic-ui-react';
 
 class GameTableCell extends Component {
     onHandleClick = () => {
-        if (!this.props.game.board[this.props.index]) {
+        if (
+            !this.props.game.board[this.props.index] &&
+            this.props.game.playing
+        ) {
             this.props.playTurn(this.props.index);
         }
     };
@@ -13,7 +16,11 @@ class GameTableCell extends Component {
     render() {
         return (
             <Table.Cell>
-                <Button fluid size="massive" onClick={this.onHandleClick}>
+                <Button
+                    fluid
+                    size="massive"
+                    disabled={!this.props.game.playing}
+                    onClick={this.onHandleClick}>
                     {this.props.game.board[this.props.index]}
                 </Button>
             </Table.Cell>
@@ -22,11 +29,11 @@ class GameTableCell extends Component {
 }
 
 const mapStateToProps = state => ({
-    game: state.game,
+    game: state.game
 });
 
 const mapDispatchToProps = dispatch => ({
-    playTurn: (index) => {
+    playTurn: index => {
         dispatch(playTurn(index));
     }
 });

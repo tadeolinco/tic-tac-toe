@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GameTable from './GameTable';
 import { Grid } from 'semantic-ui-react';
 import GameHeader from '../components/GameHeader';
+import GameButtons from './GameButtons';
 
 class App extends Component {
     render() {
@@ -17,6 +18,7 @@ class App extends Component {
                         <GameTable />
                     </Grid.Column>
                 </Grid.Row>
+                <GameButtons />
             </Grid>
         );
     }

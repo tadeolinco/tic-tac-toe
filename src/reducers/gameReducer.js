@@ -1,5 +1,6 @@
 const gameReducer = (
     state = {
+        playing: false,
         turnCount: 0,
         board: ['', '', '', '', '', '', '', '', '']
     },
@@ -16,11 +17,24 @@ const gameReducer = (
                 ],
                 turnCount: state.turnCount + 1
             };
-        case 'compute':
-            console.log(state.board);
+        case 'AI_FIRST':
             return {
                 ...state,
-                turnCount: state.turnCount + 1
+                turnCount: 1,
+                playing: true,
+                board: ['', '', '', '', '', '', '', '', '']
+            };
+        case 'PLAYER_FIRST':
+            return {
+                ...state,
+                turnCount: 0,
+                playing: true,
+                board: ['', '', '', '', '', '', '', '', '']
+            };
+        case 'STOP_GAME':
+            return {
+                ...state,
+                playing: false
             };
         default:
             return state;
