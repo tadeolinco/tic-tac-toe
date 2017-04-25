@@ -41,6 +41,20 @@ function successors(board, turnCount) {
 
 function maxValue(board, turnCount) {
     let m = Number.NEGATIVE_INFINITY;
+    let  s = successors(board, turnCount);
+    for (let m of s ){
+      m  = Math.max(m, value(board, turnCount));
+    }
+    return m;
+}
+
+function minValue(board, turnCount){
+  let m = Number.POSITIVE_INFINITY;
+  let s = successors(board, turnCount);
+  for(let m of s){
+    m = Math.min(m, value(board, turnCount));
+  }
+  return m;
 }
 
 function value(board, turnCount) {
