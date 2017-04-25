@@ -55,8 +55,8 @@ function value(board, turnCount) {
     if (isTerminal(board)) {
         return utility(board);
     } else if (turnCount % 2 == 1) {
-        maxValue(board, turnCount);
+        return maxValue(board, turnCount);
     } else {
-        minValue(board, turnCount);
+        return minValue(board, turnCount);
     }
 }
