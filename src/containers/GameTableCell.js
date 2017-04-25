@@ -6,7 +6,7 @@ import { Table, Button } from 'semantic-ui-react';
 class GameTableCell extends Component {
     onHandleClick = () => {
         if (
-            !this.props.game.board[this.props.index] &&
+            this.props.game.board[this.props.index] === '-' &&
             this.props.game.playing
         ) {
             this.props.playTurn(this.props.index);
@@ -18,6 +18,9 @@ class GameTableCell extends Component {
             <Table.Cell>
                 <Button
                     fluid
+                    style={{
+                        fontFamily: 'monospace'
+                    }}
                     size="massive"
                     disabled={!this.props.game.playing}
                     onClick={this.onHandleClick}>

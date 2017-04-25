@@ -28,7 +28,7 @@ function utility(board) {
 export function isTerminal(board) {
     if (utility(board)) return true;
     for (let cell of board) {
-        if (cell === '') {
+        if (cell === '-') {
             return false;
         }
     }
@@ -38,7 +38,7 @@ function successors(board, turnCount) {
     let boards = [];
     let move = turnCount % 2 === 0 ? 'X' : 'O';
     board.forEach((cell, index) => {
-        if (cell === '') {
+        if (cell === '-') {
             let boardCopy = {};
             boardCopy.board = board.slice();
             boardCopy.board[index] = move;
