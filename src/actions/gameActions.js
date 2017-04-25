@@ -7,131 +7,100 @@ function makeMove(index) {
     };
 }
 
-function checkStatus(board) {
-    if (board[0] === board[1] && board[2] === board[1] && board[0] !== '')
-        return board[0];
-    else if (board[0] === board[4] && board[0] === board[7] && board[0] !== '')
-        return board[0];
-    else if (board[0] === board[3] && board[0] === board[6] && board[0] !== '')
-        return board[0];
-    else if (board[1] === board[4] && board[1] === board[7] && board[0] !== '')
-        return board[1];
-    else if (board[2] === board[5] && board[2] === board[8] && board[0] !== '')
-        return board[2];
-    else if (board[3] === board[4] && board[3] === board[5] && board[0] !== '')
-        return board[3];
-    else if (board[6] === board[7] && board[7] === board[8] && board[0] !== '')
-        return board[6];
-    else if (board[2] === board[4] && board[2] === board[5] && board[0] !== '')
-        return board[2];
-    else if (
-        board[0] !== '' &&
-        board[1] !== '' &&
-        board[2] !== '' &&
-        board[3] !== '' &&
-        board[4] !== '' &&
-        board[6] !== '' &&
-        board[7] !== '' &&
-        board[8] !== ''
+function utility(board) {
+    if (
+        (board[0] === board[1] && board[2] === board[1] && board[0] === 'O') ||
+        (board[0] === board[4] && board[0] === board[7] && board[0] === 'O') ||
+        (board[0] === board[3] && board[0] === board[6] && board[0] === 'O') ||
+        (board[1] === board[4] && board[1] === board[7] && board[0] === 'O') ||
+        (board[2] === board[5] && board[2] === board[8] && board[0] === 'O') ||
+        (board[3] === board[4] && board[3] === board[5] && board[0] === 'O') ||
+        (board[6] === board[7] && board[7] === board[8] && board[0] === 'O') ||
+        (board[2] === board[4] && board[2] === board[5] && board[0] === 'O')
     )
-        return 'draw';
-    else return false;
+        return 1;
+    else if (
+        (board[0] === board[1] && board[2] === board[1] && board[0] === 'X') ||
+        (board[0] === board[4] && board[0] === board[7] && board[0] === 'X') ||
+        (board[0] === board[3] && board[0] === board[6] && board[0] === 'X') ||
+        (board[1] === board[4] && board[1] === board[7] && board[0] === 'X') ||
+        (board[2] === board[5] && board[2] === board[8] && board[0] === 'X') ||
+        (board[3] === board[4] && board[3] === board[5] && board[0] === 'X') ||
+        (board[6] === board[7] && board[7] === board[8] && board[0] === 'X') ||
+        (board[2] === board[4] && board[2] === board[5] && board[0] === 'X')
+    )
+        return -1;
+
+    return 0;
 }
 
-function minNode(board, index, turnCount) {
-    let m = Number.POSITIVE_INFINITY; // positive infinity
-    // always make copy of board so previous state wont be change
-    let boardCopy = board.slice();
-
-    if (turnCount % 2 === 0) {
-        boardCopy[index] = 'X';
-    } else {
-        boardCopy[index] = 'O';
-    }
-
-    console.log(boardCopy);
-    let status = checkStatus(boardCopy);
-    if (status === false) {
-        for (let i = 0; i < 9; ++i) {
-            //min algo
-            if (boardCopy[i] === '') {
-                let v = maxNode(boardCopy, i, turnCount + 1);
-                m = Math.min(m, v);
-            }
+function isTerminal(board) {
+    for (let cell of board) {
+        if (cell !== '') {
+            return false;
         }
-    } else if (status === 'draw') {
-        return 0;
-    } else {
-        console.log(status); //lacks when draw
-        if (status === 'X') return -1;
-        else if (status === 'O') return 1;
-        else return 0;
     }
+    return true;
+}
+function successors(board, turnCount) {
+    let boards = [];
+    let move = turnCount % 2 === 0 ? 'X' : 'O';
+    board.forEach((cell, index) => {
+        if (cell === '') {
+            let boardCopy = {};
+            boardCopy.board = board.slice();
+            boardCopy.board[index] = move;
+            boardCopy.index = index;
+            boards.push(boardCopy);
+        }
+    });
 
-    return m;
+    return boards;
 }
 
-function maxNode(board, index, turnCount) {
-    let m = Number.NEGATIVE_INFINITY;
-    let v = 0;
-    // always make copy of board so previous state wont be change
-    let boardCopy = board.slice();
-
-    m = Number.NEGATIVE_INFINITY; // negative infinity
-
-    if (turnCount % 2 === 0) {
-        boardCopy[index] = 'X';
-    } else {
-        boardCopy[index] = 'O';
+function maxValue(board, turnCount) {
+    let  s = successors(board, turnCount);
+    let returnBoard = {};
+    returnBoard.m = Number.NEGATIVE_INFINITY;
+    for (let boardCopy of s ){
+      let copy = value(boardCopy.board, turnCount +1);
+      let m = typeof copy.m === "undefined" ? copy : copy.m;
+      if(returnBoard.m  > m){
+        returnBoard.m = m;
+        returnBoard.index = boardCopy.index ;
+      }
     }
-
-    console.log(boardCopy);
-    let status = checkStatus(boardCopy);
-    if (status === false) {
-        for (let i = 0; i < 9; ++i) {
-            //max algo
-            if (boardCopy[i] === '') {
-                v = minNode(boardCopy, i, turnCount + 1);
-                m = Math.max(m, v);
-            }
-        }
-    } else {
-        console.log(status);
-        if (status === 'X') return -1;
-        else if (status === 'O')
-            //lacks when draw
-            return 1;
-        else return 0;
-    }
-    return m;
+    return returnBoard;
 }
 
-function aiMove(game, status) {
-    let index = 0;
-    let values = [];
-    let turnCount = game.turnCount;
-    let boardCopy = game.board.slice();
-
-    for (let i = 0; i < 9; i++) {
-        //main tree.
-        if (boardCopy[i] === '') {
-            //stores value of each sub tree to values
-            values[i] = minNode(boardCopy, i, turnCount);
-        }
+function minValue(board, turnCount){
+  let s = successors(board, turnCount);
+  let returnBoard = {};
+  returnBoard.m = Number.POSITIVE_INFINITY;
+  for(let boardCopy of s){
+    let copy = value(boardCopy.board, turnCount +1);
+    let m = typeof copy.m === "undefined" ? copy : copy.m;
+    if(returnBoard.m  < m){
+      returnBoard.m = m;
+      returnBoard.index = boardCopy.index ;
     }
+  }
+  return returnBoard;
+}
 
-    console.log(game.board);
-    for (let i = 0; i < 9; ++i) {
-        //chooses the best move
-        if (values[index] < values[i]) {
-            if (boardCopy[i] === '') {
-                index = i;
-            }
-        }
+function value(board, turnCount) {
+    if (isTerminal(board)) {
+        return utility(board);
+    } else if (turnCount % 2 === 1) {
+        return maxValue(board, turnCount);
+    } else {
+        return minValue(board, turnCount);
     }
+}
 
-    console.log(index);
-    return makeMove(index);
+
+function aiMove(game) {
+    return makeMove(value(game.board, game.turnCount).index);
 }
 
 export function playTurn(index, game) {
