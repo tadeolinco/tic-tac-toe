@@ -33,11 +33,19 @@ function isTerminal(board) {
     }
     return true;
 }
-
 function successors(board, turnCount) {
     let boards = [];
     let move = turnCount % 2 == 0 ? 'X' : 'O';
+    board.forEach((cell, index) => {
+        if (cell === '') {
+            let boardCopy = board.slice();
+            boardCopy[index] = move;
+        }
+    });
+
+    return boards;
 }
+
 
 function maxValue(board, turnCount) {
     let m = Number.NEGATIVE_INFINITY;
