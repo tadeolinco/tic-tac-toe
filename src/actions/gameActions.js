@@ -36,7 +36,7 @@ function utility(board) {
 
 function isTerminal(board) {
     for (let cell of board) {
-        if (cell !== '') {
+        if (cell === '') {
             return false;
         }
     }
@@ -59,38 +59,39 @@ function successors(board, turnCount) {
 }
 
 function maxValue(board, turnCount) {
-    let  s = successors(board, turnCount);
+    let s = successors(board, turnCount);
     let returnBoard = {};
     returnBoard.m = Number.NEGATIVE_INFINITY;
-    for (let boardCopy of s ){
-      let copy = value(boardCopy.board, turnCount +1);
-      let m = typeof copy.m === "undefined" ? copy : copy.m;
-      if(returnBoard.m  > m){
-        returnBoard.m = m;
-        returnBoard.index = boardCopy.index ;
-      }
+    for (let boardCopy of s) {
+        let copy = value(boardCopy.board, turnCount + 1);
+        let m = typeof copy.m === 'undefined' ? copy : copy.m;
+        if (m >= returnBoard.m) {
+            returnBoard.m = m;
+            returnBoard.index = boardCopy.index;
+        }
     }
     return returnBoard;
 }
 
-function minValue(board, turnCount){
-  let s = successors(board, turnCount);
-  let returnBoard = {};
-  returnBoard.m = Number.POSITIVE_INFINITY;
-  for(let boardCopy of s){
-    let copy = value(boardCopy.board, turnCount +1);
-    let m = typeof copy.m === "undefined" ? copy : copy.m;
-    if(returnBoard.m  < m){
-      returnBoard.m = m;
-      returnBoard.index = boardCopy.index ;
+function minValue(board, turnCount) {
+    let s = successors(board, turnCount);
+    let returnBoard = {};
+    returnBoard.m = Number.POSITIVE_INFINITY;
+    for (let boardCopy of s) {
+        let copy = value(boardCopy.board, turnCount + 1);
+        let m = typeof copy.m === 'undefined' ? copy : copy.m;
+        if (m <= returnBoard.m) {
+            returnBoard.m = m;
+            returnBoard.index = boardCopy.index;
+        }
     }
-  }
-  return returnBoard;
+    return returnBoard;
 }
 
 function value(board, turnCount) {
     if (isTerminal(board)) {
-        return utility(board);
+        let u = utility(board);
+        return u;
     } else if (turnCount % 2 === 1) {
         return maxValue(board, turnCount);
     } else {
@@ -98,17 +99,14 @@ function value(board, turnCount) {
     }
 }
 
-
 function aiMove(game) {
-    return makeMove(value(game.board, game.turnCount).index);
+    let v = value(game.board, game.turnCount);
+    return makeMove(v.index);
 }
 
 export function playTurn(index, game) {
     return (dispatch, getState) => {
-        // sends MAKE_MOVE action to gameReducer
         dispatch(makeMove(index));
         dispatch(aiMove(getState().game));
-        //dispatch(copmute(getState().game));
-        // compute here
     };
 }
