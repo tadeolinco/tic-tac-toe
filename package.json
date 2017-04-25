@@ -24,13 +24,11 @@
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
         "prettify": "prettier --tab-width 4 --single-quote --jsx-bracket-same-line --write \"./src/**/*.js\"",
-        "pre-commit": "lint-staged",
-        "pre-push": "lint-staged",
+        "precommit": "lint-staged",
+        "prepush": "lint-staged",
         "lint-staged": "lint-staged"
     },
-    "pre-commit": "lint-staged",
-    "pre-push": "lint-staged",
-    "lint-stage": {
+    "lint-staged": {
         "*.js": [
             "prettier --tab-width 4 --single-quote --jsx-bracket-same-line --write",
             "git add"
