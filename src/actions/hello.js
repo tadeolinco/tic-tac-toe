@@ -33,10 +33,18 @@ function isTerminal(board) {
     }
     return true;
 }
-
 function successors(board, turnCount) {
     let boards = [];
     let move = turnCount % 2 == 0 ? 'X' : 'O';
+    board.forEach((cell, index) => {
+        if (cell === '') {
+            let boardCopy = board.slice();
+            boardCopy[index] = move;
+            boards.push(boardCopy);
+        }
+    });
+
+    return boards;
 }
 
 function maxValue(board, turnCount) {
@@ -61,8 +69,8 @@ function value(board, turnCount) {
     if (isTerminal(board)) {
         return utility(board);
     } else if (turnCount % 2 == 1) {
-        maxValue(board, turnCount);
+        return maxValue(board, turnCount);
     } else {
-        minValue(board, turnCount);
+        return minValue(board, turnCount);
     }
 }
