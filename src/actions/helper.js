@@ -1,4 +1,4 @@
-function utility(board) {
+export function utility(board) {
     if (
         (board[0] === board[1] && board[2] === board[1] && board[0] === 'O') ||
         (board[3] === board[4] && board[3] === board[5] && board[3] === 'O') ||
@@ -34,6 +34,7 @@ export function isTerminal(board) {
     }
     return true;
 }
+
 function successors(board, turnCount) {
     let boards = [];
     let move = turnCount % 2 === 0 ? 'X' : 'O';

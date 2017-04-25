@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import GameTable from './GameTable';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Message } from 'semantic-ui-react';
 import GameHeader from '../components/GameHeader';
 import GameButtons from './GameButtons';
 
 class App extends Component {
     render() {
         return (
-            <Grid container centered>
+            <Grid container centered textAlign="center">
                 <Grid.Row>
                     <Grid.Column width={8}>
                         <GameHeader />
@@ -19,9 +20,24 @@ class App extends Component {
                     </Grid.Column>
                 </Grid.Row>
                 <GameButtons />
+                <Grid.Row>
+                    <Grid.Column width={8}>
+                        {this.props.game.winner &&
+                            <Message>
+                                <Message.Header>
+                                    {this.props.game.winner}
+                                </Message.Header>
+                            </Message>}
+                    </Grid.Column>
+                </Grid.Row>
+
             </Grid>
         );
     }
 }
 
-export default App;
+const mapStateToProps = state => ({
+    game: state.game
+});
+
+export default connect(mapStateToProps)(App);

@@ -2,7 +2,8 @@ const gameReducer = (
     state = {
         playing: false,
         turnCount: 0,
-        board: ['-', '-', '-', '-', '-', '-', '-', '-', '-']
+        board: ['-', '-', '-', '-', '-', '-', '-', '-', '-'],
+        winner: ''
     },
     action
 ) => {
@@ -22,19 +23,22 @@ const gameReducer = (
                 ...state,
                 turnCount: 1,
                 playing: true,
-                board: ['-', '-', '-', '-', '-', '-', '-', '-', '-']
+                board: ['-', '-', '-', '-', '-', '-', '-', '-', '-'],
+                winner: ''
             };
         case 'PLAYER_FIRST':
             return {
                 ...state,
                 turnCount: 0,
                 playing: true,
-                board: ['-', '-', '-', '-', '-', '-', '-', '-', '-']
+                board: ['-', '-', '-', '-', '-', '-', '-', '-', '-'],
+                winner: ''
             };
         case 'STOP_GAME':
             return {
                 ...state,
-                playing: false
+                playing: false,
+                winner: action.payload.winner
             };
         default:
             return state;

@@ -5,33 +5,23 @@ import { Button, Grid } from 'semantic-ui-react';
 
 class GameButtons extends Component {
     onHandlePlayerFirst = () => {
-        if (!this.props.game.playing) {
-            this.props.playerFirst();
-        }
+        this.props.playerFirst();
     };
 
     onHandleAiFirst = () => {
-        if (!this.props.game.playing) {
-            this.props.aiFirst();
-        }
+        this.props.aiFirst();
     };
 
     render() {
         return (
             <Grid.Row>
                 <Grid.Column width={4}>
-                    <Button
-                        fluid
-                        disabled={this.props.game.playing}
-                        onClick={this.onHandlePlayerFirst}>
+                    <Button fluid onClick={this.onHandlePlayerFirst}>
                         Player First
                     </Button>
                 </Grid.Column>
                 <Grid.Column width={4}>
-                    <Button
-                        fluid
-                        disabled={this.props.game.playing}
-                        onClick={this.onHandleAiFirst}>
+                    <Button fluid onClick={this.onHandleAiFirst}>
                         AI First
                     </Button>
                 </Grid.Column>

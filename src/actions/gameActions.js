@@ -1,4 +1,4 @@
-import { value, isTerminal } from './helper';
+import { value, isTerminal, utility } from './helper';
 
 function makeMove(index) {
     return {
@@ -25,9 +25,12 @@ export function aiFirst() {
     };
 }
 
-function stopGame() {
+function stopGame(winner) {
     return {
-        type: 'STOP_GAME'
+        type: 'STOP_GAME',
+        payload: {
+            winner
+        }
     };
 }
 
@@ -35,9 +38,6 @@ export function aiPlayTurn() {
     return (dispatch, getState) => {
         dispatch(aiFirst());
         dispatch(aiMove(getState().game));
-        if (isTerminal(getState().game.board)) {
-            dispatch(stopGame());
-        }
     };
 }
 
@@ -45,11 +45,19 @@ export function playTurn(index) {
     return (dispatch, getState) => {
         dispatch(makeMove(index));
         if (isTerminal(getState().game.board)) {
-            dispatch(stopGame());
+            if (utility(getState().game.board) === 0) {
+                dispatch(stopGame('DRAW'));
+            } else {
+                dispatch(stopGame('PLAYER WINS'));
+            }
         } else {
             dispatch(aiMove(getState().game));
             if (isTerminal(getState().game.board)) {
-                dispatch(stopGame());
+                if (utility(getState().game.board) === 0) {
+                    dispatch(stopGame('DRAW'));
+                } else {
+                    dispatch(stopGame('AI WINS'));
+                }
             }
         }
     };
