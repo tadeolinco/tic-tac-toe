@@ -10,7 +10,15 @@ function makeMove(index) {
 }
 
 function aiMove(game) {
-    return makeMove(value(game.board, game.turnCount).index);
+    return makeMove(
+        value(
+            game.board,
+            game.turnCount,
+            Number.NEGATIVE_INFINITY,
+            Number.POSITIVE_INFINITY,
+            0
+        ).index
+    );
 }
 
 export function playerFirst() {

@@ -1,4 +1,4 @@
-export function utility(board) {
+export function utility(board, count) {
     if (
         (board[0] === board[1] && board[2] === board[1] && board[0] === 'O') ||
         (board[3] === board[4] && board[3] === board[5] && board[3] === 'O') ||
@@ -51,42 +51,50 @@ function successors(board, turnCount) {
     return boards;
 }
 
-function maxValue(board, turnCount) {
+function maxValue(board, turnCount, alpha, beta) {
     let s = successors(board, turnCount);
     let returnBoard = {};
     returnBoard.m = Number.NEGATIVE_INFINITY;
     for (let boardCopy of s) {
-        let copy = value(boardCopy.board, turnCount + 1);
+        let copy = value(boardCopy.board, turnCount + 1, alpha, beta);
         let m = typeof copy.m === 'undefined' ? copy : copy.m;
         if (m > returnBoard.m) {
             returnBoard.m = m;
             returnBoard.index = boardCopy.index;
         }
-    }
-    return returnBoard;
-}
-
-function minValue(board, turnCount) {
-    let s = successors(board, turnCount);
-    let returnBoard = {};
-    returnBoard.m = Number.POSITIVE_INFINITY;
-    for (let boardCopy of s) {
-        let copy = value(boardCopy.board, turnCount + 1);
-        let m = typeof copy.m === 'undefined' ? copy : copy.m;
-        if (m < returnBoard.m) {
-            returnBoard.m = m;
-            returnBoard.index = boardCopy.index;
+        alpha = Math.max(alpha, returnBoard.m);
+        if (beta <= alpha) {
+            break;
         }
     }
     return returnBoard;
 }
 
-export function value(board, turnCount) {
+function minValue(board, turnCount, alpha, beta) {
+    let s = successors(board, turnCount);
+    let returnBoard = {};
+    returnBoard.m = Number.POSITIVE_INFINITY;
+    for (let boardCopy of s) {
+        let copy = value(boardCopy.board, turnCount + 1, alpha, beta);
+        let m = typeof copy.m === 'undefined' ? copy : copy.m;
+        if (m < returnBoard.m) {
+            returnBoard.m = m;
+            returnBoard.index = boardCopy.index;
+        }
+        beta = Math.min(beta, returnBoard.m);
+        if (beta <= alpha) {
+            break;
+        }
+    }
+    return returnBoard;
+}
+
+export function value(board, turnCount, alpha, beta) {
     if (isTerminal(board)) {
         return utility(board, turnCount);
     } else if (turnCount % 2 === 1) {
-        return maxValue(board, turnCount);
+        return maxValue(board, turnCount, alpha, beta);
     } else {
-        return minValue(board, turnCount);
+        return minValue(board, turnCount, alpha, beta);
     }
 }
